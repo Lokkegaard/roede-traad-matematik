@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Den røde tråd i matematik — Tarup Skole</title>
+<style>
+  :root{
+    --bg:#F6F4EF;
+    --surface:#FFFFFF;
+    --surface-2:#FBFAF5;
+    --ink:#211E1A;
+    --ink-soft:#6E6A61;
+    --ink-faint:#9A968C;
+    --line:#DDD7C8;
+    --line-soft:#EAE5D9;
+    --red:#B23A2E;
+    --red-ink:#7E2A21;
+    --red-soft:#F1DCD8;
+    --indskoling:#2F6F63;
+    --indskoling-soft:#DCEAE6;
+    --mellemtrin:#A0742F;
+    --mellemtrin-soft:#F1E6D3;
+    --udskoling:#5B4B8A;
+    --udskoling-soft:#E4DEF1;
+    --skoledu:#CC5A26;
+    --skoledu-soft:#FBE7DA;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(33,30,26,.06), 0 4px 14px rgba(33,30,26,.05);
+    --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Noto Serif", serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#1B1916;
+      --surface:#232019;
+      --surface-2:#292420;
+      --ink:#F1ECE2;
+      --ink-soft:#B4AC9E;
+      --line:#3B352C;
+      --line-soft:#2D2822;
+      --red:#E2685C;
+      --red-ink:#F3A79C;
+      --red-soft:#3A2420;
+      --indskoling:#5CB6A4;
+      --indskoling-soft:#20332E;
+      --mellemtrin:#D8AB63;
+      --mellemtrin-soft:#332A1A;
+      --udskoling:#9E8AD6;
+      --udskoling-soft:#2A2438;
+      --skoledu:#F0895A;
+      --skoledu-soft:#3D2A1E;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 18px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B1916;
+    --surface:#232019;
+    --surface-2:#292420;
+    --ink:#F1ECE2;
+    --ink-soft:#B4AC9E;
+    --line:#3B352C;
+    --line-soft:#2D2822;
+    --red:#E2685C;
+    --red-ink:#F3A79C;
+    --red-soft:#3A2420;
+    --indskoling:#5CB6A4;
+    --indskoling-soft:#20332E;
+    --mellemtrin:#D8AB63;
+    --mellemtrin-soft:#332A1A;
+    --udskoling:#9E8AD6;
+    --udskoling-soft:#2A2438;
+    --skoledu:#F0895A;
+    --skoledu-soft:#3D2A1E;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 18px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#F6F4EF; --surface:#FFFFFF; --surface-2:#FBFAF5; --ink:#211E1A; --ink-soft:#6E6A61;
+    --line:#DDD7C8; --line-soft:#EAE5D9; --red:#B23A2E; --red-ink:#7E2A21; --red-soft:#F1DCD8;
+    --indskoling:#2F6F63; --indskoling-soft:#DCEAE6; --mellemtrin:#A0742F; --mellemtrin-soft:#F1E6D3;
+    --udskoling:#5B4B8A; --udskoling-soft:#E4DEF1;
+    --skoledu:#CC5A26; --skoledu-soft:#FBE7DA;
+    --shadow:0 1px 2px rgba(33,30,26,.06), 0 4px 14px rgba(33,30,26,.05);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--red-soft); color:var(--red-ink);}
+
+  a{color:var(--red-ink);}
+  a:hover{color:var(--red);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 20px 80px;}
+
+  /* ---------- Header ---------- */
+  header.top{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{max-width:920px;margin:0 auto;padding:18px 20px 14px;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--red-ink);
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-size:clamp(1.5rem, 3vw, 2.15rem);
+    font-weight:600;
+    margin:0 0 4px;
+    text-wrap:balance;
+    letter-spacing:-.01em;
+  }
+  .subtitle{color:var(--ink-soft); font-size:.95rem; margin:0 0 16px;}
+
+  .controls{display:flex; flex-wrap:wrap; align-items:center; gap:10px; justify-content:space-between;}
+  .view-toggle{
+    display:inline-flex; background:var(--surface-2); border:1px solid var(--line);
+    border-radius:999px; padding:3px; gap:2px;
+  }
+  .view-toggle button{
+    appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    font-family:var(--font-body); font-size:.85rem; font-weight:600;
+    padding:7px 15px; border-radius:999px; cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+  .view-toggle button.active{background:var(--red); color:#fff;}
+  .view-toggle button:not(.active):hover{color:var(--ink);}
+
+  .search{
+    display:flex; align-items:center; gap:8px;
+    background:var(--surface); border:1px solid var(--line); border-radius:999px;
+    padding:7px 14px; flex:1; min-width:180px; max-width:320px;
+  }
+  .search svg{flex:none; opacity:.55;}
+  .search input{
+    border:none; outline:none; background:transparent; color:var(--ink);
+    font-family:var(--font-body); font-size:.88rem; width:100%;
+  }
+  .search input::placeholder{color:var(--ink-soft);}
+
+  .legend{display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; font-size:.8rem; color:var(--ink-soft);}
+  .legend .item{display:inline-flex; align-items:center; gap:6px;}
+  .legend .swatch{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .swatch.indskoling{background:var(--indskoling);}
+  .swatch.mellemtrin{background:var(--mellemtrin);}
+  .swatch.udskoling{background:var(--udskoling);}
+
+  /* ---------- Intro / callouts ---------- */
+  .intro{padding-top:22px;}
+  .callout{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 18px; box-shadow:var(--shadow); margin-bottom:14px;
+  }
+  .callout h3{
+    font-family:var(--font-display); font-size:1rem; margin:0 0 8px; font-weight:600;
+    display:flex; align-items:center; gap:8px;
+  }
+  .callout h3 .dot{width:8px;height:8px;border-radius:50%;background:var(--red); flex:none;}
+  .callout p{margin:0; color:var(--ink-soft); font-size:.92rem;}
+  .callout ul{margin:0; padding-left:1.1em; color:var(--ink-soft); font-size:.9rem; display:flex; flex-direction:column; gap:6px;}
+  .callout ul li strong{color:var(--ink); font-weight:600;}
+  .callout .kompetence{font-size:.8rem; color:var(--ink-faint, var(--ink-soft)); font-style:italic;}
+
+  /* ---------- View sections ---------- */
+  .view{display:none; padding-top:8px;}
+  .view.active{display:block;}
+
+  /* Stage section (grade view) */
+  .stage{margin-top:34px;}
+  .stage-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid var(--accent);
+  }
+  .stage-head h2{
+    font-family:var(--font-display); font-size:1.3rem; margin:0; font-weight:600;
+    color:var(--accent);
+  }
+  .stage-head .range{font-size:.85rem; color:var(--ink-soft); font-family:var(--font-mono);}
+  .stage.stage-indskoling{--accent:var(--indskoling); --accent-soft:var(--indskoling-soft);}
+  .stage.stage-mellemtrin{--accent:var(--mellemtrin); --accent-soft:var(--mellemtrin-soft);}
+  .stage.stage-udskoling{--accent:var(--udskoling); --accent-soft:var(--udskoling-soft);}
+
+  details.opmaerksomhed{
+    background:var(--accent-soft); border-radius:8px; padding:2px 14px; margin-bottom:16px;
+    border:1px solid var(--line-soft);
+  }
+  details.opmaerksomhed summary{
+    cursor:pointer; padding:10px 0; font-weight:600; font-size:.85rem; color:var(--ink);
+    list-style:none; display:flex; align-items:center; gap:8px;
+  }
+  details.opmaerksomhed summary::-webkit-details-marker{display:none;}
+  details.opmaerksomhed summary::before{content:"›"; display:inline-block; transition:transform .15s ease; font-size:1.1em; color:var(--accent);}
+  details.opmaerksomhed[open] summary::before{transform:rotate(90deg);}
+  details.opmaerksomhed ul{margin:0 0 12px; padding-left:1.2em; font-size:.87rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:8px;}
+
+  .grades{position:relative; padding-left:26px;}
+  .grades::before{
+    content:""; position:absolute; left:7px; top:8px; bottom:8px; width:2px;
+    background:var(--red); opacity:.45; border-radius:2px;
+  }
+
+  details.grade{
+    position:relative; margin-bottom:10px; background:var(--surface);
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  details.grade > summary{
+    cursor:pointer; list-style:none; padding:13px 16px; display:flex; align-items:center; gap:12px;
+    font-weight:600;
+  }
+  details.grade > summary::-webkit-details-marker{display:none;}
+  details.grade > summary::before{
+    content:""; position:absolute; left:-19px; top:22px; width:11px; height:11px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 0 3px var(--bg);
+  }
+  .grade-num{font-family:var(--font-display); font-size:1.15rem; color:var(--accent);}
+  .grade-emne-count{margin-left:auto; font-size:.78rem; color:var(--ink-soft); font-family:var(--font-mono); font-weight:400;}
+  .chev{margin-left:2px; transition:transform .15s ease; color:var(--ink-soft); flex:none;}
+  details.grade[open] .chev{transform:rotate(90deg);}
+
+  .topics{padding:0 14px 14px; display:flex; flex-direction:column; gap:8px;}
+
+  details.topic{
+    background:var(--surface-2); border:1px solid var(--line-soft); border-radius:8px; overflow:hidden;
+  }
+  details.topic > summary{
+    cursor:pointer; list-style:none; padding:10px 14px; display:flex; align-items:center; gap:8px;
+    font-size:.93rem; font-weight:600;
+  }
+  details.topic > summary::-webkit-details-marker{display:none;}
+  details.topic .chev{font-size:.8rem;}
+  details.topic[open]{border-color:var(--accent);}
+  .topic-body{padding:2px 16px 14px;}
+
+  .detail-block{margin-top:10px;}
+  .detail-block h4{
+    margin:0 0 6px; font-size:.7rem; text-transform:uppercase; letter-spacing:.08em;
+    color:var(--accent); font-weight:700; font-family:var(--font-mono);
+  }
+  ul.begreb-list{margin:0; padding-left:1.15em; font-size:.87rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:5px;}
+  ul.begreb-list li strong{color:var(--ink);}
+  ul.chips{display:flex; flex-wrap:wrap; gap:6px; margin:0; padding:0; list-style:none;}
+  ul.chips li{
+    background:var(--accent-soft, var(--line-soft)); color:var(--ink); font-size:.78rem;
+    padding:4px 10px; border-radius:999px; border:1px solid var(--line-soft);
+  }
+
+  .sk-heading{ color:var(--skoledu) !important; display:flex; align-items:center; gap:6px; }
+  .sk-dot{ width:7px; height:7px; border-radius:50%; background:var(--skoledu); flex:none; }
+  ul.sk-links li{ background:transparent; padding:0; border:none; }
+  .sk-link{
+    display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+    background:var(--skoledu-soft); color:var(--skoledu); border:1px solid var(--skoledu);
+    font-size:.8rem; font-weight:600; padding:5px 10px 5px 12px; border-radius:999px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .sk-link:hover{ background:var(--skoledu); color:#fff; }
+  .sk-grade{ font-family:var(--font-mono); font-weight:400; opacity:.8; font-size:.72rem; }
+  .sk-ext{ opacity:.7; flex:none; }
+  .sk-link-offset{ border-style:dashed; }
+  .sk-offset-mark{ opacity:.85; }
+  .sk-offset-note{ margin:7px 0 0; font-size:.74rem; color:var(--ink-soft); font-style:italic; }
+
+  /* ---------- Copy-link buttons ---------- */
+  .copy-link{
+    appearance:none; border:none; background:transparent; color:var(--ink-soft); cursor:pointer;
+    padding:4px; margin:0 0 0 auto; border-radius:6px; display:inline-flex; align-items:center; justify-content:center;
+    position:relative; flex:none; line-height:0;
+  }
+  .copy-link:hover{ background:var(--line-soft); color:var(--ink); }
+  .copy-link.copied{ color:var(--indskoling); background:var(--indskoling-soft); }
+  .copy-link.copied::after{
+    content:"Link kopieret"; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:var(--bg); font-size:.68rem; font-weight:600; font-family:var(--font-body);
+    padding:3px 8px; border-radius:6px; white-space:nowrap; margin-top:6px; box-shadow:var(--shadow); z-index:5;
+  }
+
+  /* ---------- Print button ---------- */
+  .print-btn{
+    display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--line);
+    color:var(--ink); font-family:var(--font-body); font-size:.85rem; font-weight:600;
+    padding:7px 14px; border-radius:999px; cursor:pointer; flex:none;
+  }
+  .print-btn:hover{ border-color:var(--red); color:var(--red-ink); }
+
+  /* ---------- Footer meta ---------- */
+  footer p{ margin:0 0 6px; }
+  footer p:last-child{ margin-bottom:0; }
+  footer .meta{ font-family:var(--font-mono); font-size:.72rem; opacity:.85; }
+
+  /* ---------- Thread view ---------- */
+  .thread-intro{color:var(--ink-soft); font-size:.9rem; margin:0 0 20px; max-width:62ch;}
+  .threads{display:flex; flex-direction:column; gap:10px;}
+
+  details.thread{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  details.thread > summary{
+    cursor:pointer; list-style:none; padding:14px 16px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  details.thread > summary::-webkit-details-marker{display:none;}
+  .thread-title{font-family:var(--font-display); font-weight:600; font-size:1.02rem; flex:none;}
+  .thread-dots{display:flex; align-items:center; gap:5px; margin-left:auto;}
+  .dot{width:9px; height:9px; border-radius:50%; background:var(--line); flex:none;}
+  .dot.on.stage-indskoling{background:var(--indskoling);}
+  .dot.on.stage-mellemtrin{background:var(--mellemtrin);}
+  .dot.on.stage-udskoling{background:var(--udskoling);}
+  .thread-range{font-family:var(--font-mono); font-size:.75rem; color:var(--ink-soft); flex:none;}
+  details.thread .chev{margin-left:4px;}
+  details.thread[open]{border-color:var(--red);}
+
+  .thread-body{padding:2px 18px 18px;}
+  .thread-entries{position:relative; padding-left:26px;}
+  .thread-entries::before{
+    content:""; position:absolute; left:7px; top:8px; bottom:8px; width:2px;
+    background:var(--red); opacity:.45; border-radius:2px;
+  }
+
+  details.thread-entry{
+    position:relative; margin-bottom:8px; background:var(--surface-2);
+    border:1px solid var(--line-soft); border-radius:8px; overflow:hidden;
+  }
+  details.thread-entry > summary{
+    cursor:pointer; list-style:none; padding:10px 14px; display:flex; align-items:baseline; gap:10px;
+    font-size:.93rem;
+  }
+  details.thread-entry > summary::-webkit-details-marker{display:none;}
+  details.thread-entry > summary::before{
+    content:""; position:absolute; left:-19px; top:16px; width:10px; height:10px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 0 3px var(--bg);
+  }
+  details.thread-entry.stage-indskoling{--accent:var(--indskoling); --accent-soft:var(--indskoling-soft);}
+  details.thread-entry.stage-mellemtrin{--accent:var(--mellemtrin); --accent-soft:var(--mellemtrin-soft);}
+  details.thread-entry.stage-udskoling{--accent:var(--udskoling); --accent-soft:var(--udskoling-soft);}
+  .te-grade{font-family:var(--font-mono); font-weight:700; color:var(--accent); flex:none;}
+  .te-emne{font-weight:600;}
+  .te-body{padding:2px 16px 14px 40px;}
+
+  .hidden{display:none !important;}
+
+  footer{margin-top:50px; padding-top:18px; border-top:1px solid var(--line); font-size:.8rem; color:var(--ink-soft);}
+
+  @media (max-width:560px){
+    .grades, .thread-entries{padding-left:20px;}
+    details.grade > summary::before, details.thread-entry > summary::before{left:-15px;}
+    .grade-emne-count{display:none;}
+  }
+
+  /* ---------- Print ---------- */
+  @media print{
+    :root, :root[data-theme="dark"], :root[data-theme="light"]{
+      --bg:#fff; --surface:#fff; --surface-2:#fff; --ink:#111; --ink-soft:#3a3a3a;
+      --line:#999; --line-soft:#ccc; --red:#8f2c22; --red-ink:#8f2c22; --red-soft:#fff;
+      --indskoling:#2F6F63; --indskoling-soft:#fff; --mellemtrin:#7a5518; --mellemtrin-soft:#fff;
+      --udskoling:#4a3d70; --udskoling-soft:#fff; --skoledu:#a04a1f; --skoledu-soft:#fff;
+      --shadow:none;
+    }
+    @page{ margin:1.5cm; }
+    body{ background:#fff; }
+    header.top{ position:static; background:#fff; backdrop-filter:none; border-bottom:1px solid #000; }
+    .search, .view-toggle, .print-btn, .copy-link, .sk-ext, .legend, .chev{ display:none !important; }
+    .grades::before, .thread-entries::before{ display:none; }
+    .grades, .thread-entries{ padding-left:0; }
+    details.grade > summary::before, details.thread-entry > summary::before{ display:none; }
+
+    /* force all collapsible content visible */
+    details.opmaerksomhed > ul,
+    .topics, .topic-body, .thread-body, .te-body{ display:block !important; }
+
+    details.grade, details.topic, details.thread, details.thread-entry, .callout{
+      break-inside:avoid; box-shadow:none !important; border:1px solid #bbb !important;
+    }
+    a{ color:#111; }
+    .sk-link{ background:#fff !important; }
+    .sk-link[href]::after{
+      content:" → " attr(href); display:block; font-size:.62rem; color:#555;
+      word-break:break-all; margin-top:2px; font-weight:400;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <p class="eyebrow">Tarup Skole · Matematik</p>
+    <h1>Den røde tråd i matematikundervisningen</h1>
+    <p class="subtitle">Overblik over emner, faglige begreber, IT-værktøjer og vidensbank fra 1. til 9. klasse.</p>
+    <div class="controls">
+      <div class="view-toggle" role="group" aria-label="Vælg visning">
+        <button id="btn-grade" class="active" aria-pressed="true">Efter årgang</button>
+        <button id="btn-thread" aria-pressed="false">Efter emne på tværs</button>
+      </div>
+      <label class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="search-input" type="text" placeholder="Søg fx “brøker”, “GeoGebra”…" autocomplete="off">
+      </label>
+      <button id="btn-print" class="print-btn" type="button" title="Udskriv eller gem som PDF">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Udskriv
+      </button>
+    </div>
+    <div class="legend">
+      <span class="item"><span class="swatch indskoling"></span>Indskoling · 1.–3. kl.</span>
+      <span class="item"><span class="swatch mellemtrin"></span>Mellemtrin · 4.–6. kl.</span>
+      <span class="item"><span class="swatch udskoling"></span>Udskoling · 7.–9. kl.</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="intro">
+    <div class="callout">
+      <h3><span class="dot"></span>Teststrategi</h3>
+      <p>Den nationale test i matematik gennemføres på 3. og 6. årgang. Den frivillige test gennemføres på det klassetrin, testen er målrettet til. Alle elever testes i Mat 0-9 fra Hogrefe (digital version). Resultaterne lægges i sikre-filer under en samlet mappe med titlen “Matematik evalueringer”. Testene danner, sammen med evalueringer, grundlag for holddannelser og særlige indsatser.</p>
+    </div>
+  </div>
+
+  <!-- ================= VIEW: BY GRADE ================= -->
+  <div id="view-grade" class="view active"></div>
+
+  <!-- ================= VIEW: BY THREAD ================= -->
+  <div id="view-thread" class="view">
+    <p class="thread-intro">Samme emne set på tværs af hele skoleforløbet — klik et emne for at se hvilke årgange der arbejder med det, og hvordan det udvikler sig fra 1. til 9. klasse.</p>
+    <div class="threads" id="threads-container"></div>
+  </div>
+
+  <footer>
+    <p>Baseret på dokumentet <em>“Den røde tråd i matematikundervisningen, 1. til 9. klasse”</em>, Tarup Skole. Genereret som interaktivt overblik.</p>
+    <p class="meta">Side sidst opdateret: 6. august 2026 · Skoledu-forløb hentet fra Skoledus forløbskatalog: 6. august 2026 — tjek Skoledu direkte, hvis kataloget ændrer sig.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+
+  var STAGE_OF_GRADE = {1:'indskoling',2:'indskoling',3:'indskoling',4:'mellemtrin',5:'mellemtrin',6:'mellemtrin',7:'udskoling',8:'udskoling',9:'udskoling'};
+
+  var STAGE_INFO = {
+    indskoling:{
+      label:'Indskoling', range:'1.–3. klasse',
+      opmaerksomhed:[
+        ['Eleverne kan anvende trecifrede tal til at beskrive antal og rækkefølge','Kompetenceområde: Tal og algebra / Tal'],
+        ['Eleven kan addere og subtrahere enkle naturlige tal med hovedregning og lommeregner','Kompetenceområde: Tal og algebra / Regnestrategier'],
+        ['Eleven kan anslå og måle længde, tid og vægt i enkle hverdagssammenhænge','Kompetenceområde: Geometri og måling / Måling']
+      ]
+    },
+    mellemtrin:{
+      label:'Mellemtrin', range:'4.–6. klasse',
+      opmaerksomhed:[
+        ['Eleven kan vælge hensigtsmæssig regningsart til løsning af enkle hverdagsproblemer og opstille et simpelt regneudtryk','Kompetenceområde: Tal og algebra / Regnestrategier'],
+        ['Eleven kan gennemføre regneprocesser inden for alle fire regningsarter med inddragelse af overslag og lommeregner','Kompetenceområde: Tal og algebra / Regnestrategier'],
+        ['Eleven kan uddrage relevante oplysninger i enkle matematikholdige tekster','Kompetenceområde: Matematiske kompetencer / Kommunikation']
+      ]
+    },
+    udskoling:{ label:'Udskoling', range:'7.–9. klasse', opmaerksomhed:null }
+  };
+
+  var THREAD_ORDER = ['tal','regningsarter','broeker','procent','ligninger','funktioner','geometri','areal','maaling','statistik','trigonometri','oekonomi','problemregning'];
+  var THREAD_LABELS = {
+    tal:'Tal og talforståelse',
+    regningsarter:'Regningsarter (+, −, ×, ÷)',
+    broeker:'Brøker',
+    procent:'Procent',
+    ligninger:'Ligninger, uligheder og bogstavregning',
+    funktioner:'Funktioner og koordinatsystem',
+    geometri:'Geometri, figurer og konstruktion',
+    areal:'Areal, omkreds og rumfang',
+    maaling:'Måling og enheder',
+    statistik:'Statistik og sandsynlighed',
+    trigonometri:'Trigonometri',
+    oekonomi:'Økonomi',
+    problemregning:'Problemregning og modellering'
+  };
+
+  // ---- Data: [grade, thread, emne, tools[], groups[[label,items[]]], viden[], sk:[[label,grade,url]] ] ----
+  var TOPICS = [
+    {g:1,t:'tal',e:'Positionssystemet',tools:['GeoGebra – prik til prik'],groups:[[null,['Afkode talsymbolerne i talområdet 0-100','Opdele et trecifret tal i hundreder, tiere og enere','Kende og bruge “lige mange”, “flest”, “færrest”, “lige”/“ulige”, “før”/“efter”','10’ere og 1’ere, taltavlen','Skrive læsbare tal','Angive tallet lige før og lige efter et bestemt trecifret tal','Beskrive og fortsætte en talfølge','Lighedstegnet som “balance”']]],viden:['Den tomme tallinje','Perlesnore','mathlearningcenter.org/apps'],sk:[['Tal til 100',1,'https://app.skoledu.dk/opgaver/indskoling/tal/forloeb/tal-til-100'],['Tal til 20',1,'https://app.skoledu.dk/opgaver/indskoling/tal/forloeb/tal-til-20']]},
+    {g:1,t:'regningsarter',e:'Addition',tools:[],groups:[[null,['10’er venner','Addere et- og tocifrede tal med og uden tierovergang','Flest mulige strategier: +1, plus-par …','Plusalgoritmen introduceres','Tier-plus, plushistorier','Spil, kort, terning','Lære at bruge lommeregner','10-tabel, 2-tabel og 5-tabel']]],viden:[],sk:[['Start med plus',1,'https://app.skoledu.dk/opgaver/indskoling/plus/forloeb/start-med-plus'],['10’er venner og pluspar',1,'https://app.skoledu.dk/opgaver/indskoling/plus/forloeb/10er-venner-og-pluspar'],['Regnestrategier til plus',1,'https://app.skoledu.dk/opgaver/indskoling/plus/forloeb/regnestrategier-til-plus']]},
+    {g:1,t:'geometri',e:'Geometriske figurer og mønstre',tools:['Geoboard (hjemmeside)','GeoGebra – spiraler, flytte figurer, tegne trekanter, tegne firkanter'],groups:[[null,['Trekant, firkant – rektangel, kvadrat, cirkel, oval, mangekanter','Måle og bestemme omkreds (“rundt om”) af figurer','Areal ved tælling','Identificere og fortsætte et mønster','Selv skabe et mønster','Lineal, geobrikker, centicubes, sømbræt']]],viden:[],sk:[['Kan du se forskel?',1,'https://app.skoledu.dk/opgaver/indskoling/former-og-figurer/forloeb/kan-du-se-forskel']]},
+    {g:1,t:'regningsarter',e:'Subtraktion',tools:[],groups:[[null,['Modsætningen til plus','Forskellige subtraktionsstrategier','Kende symbolerne − (minus) og = (lig med)','Forklare hvordan de finder resultatet af et minusstykke','Finde differencen mellem to eller flere tocifrede tal uden tierovergang']]],viden:[],sk:[['Start med minus',1,'https://app.skoledu.dk/opgaver/indskoling/minus/forloeb/start-med-minus'],['Regnestrategier til minus',1,'https://app.skoledu.dk/opgaver/indskoling/minus/forloeb/regnestrategier-til-minus']]},
+    {g:1,t:'maaling',e:'Måling',tools:['iPad: Lær klokken','GeoGebra – stil uret'],groups:[[null,['Uautoriserede måleenheder (fødder, krop), centicubes','Lineal, målebånd, vægt, ur','cm, m','kg, g','Hele og halve timer']]],viden:[],sk:[['Mål længder',1,'https://app.skoledu.dk/opgaver/indskoling/maaling/forloeb/maal-laengder']]},
+    {g:1,t:'statistik',e:'Statistik og chance',tools:[],groups:[[null,['Vurdere chancestørrelse i spil, terning/lodtrækning']]],viden:['Spil'],sk:[['Chance',1,'https://app.skoledu.dk/opgaver/indskoling/sandsynlighed/forloeb/chance'],['Tabeller og diagrammer',1,'https://app.skoledu.dk/opgaver/indskoling/statistik/forloeb/tabeller-og-diagrammer']]},
+    {g:1,t:'geometri',e:'Spejling og symmetri',tools:[],groups:[[null,['Flytninger','Spejle figurer i linjer','Finde og tegne eventuelle symmetriakser i figurer','Opdage spejlingssymmetri i mønstre og tegne/lave mønstre med spejlingssymmetri']]],viden:['Spejle, centicubes'],sk:[['Symmetri',2,'https://app.skoledu.dk/opgaver/indskoling/placering-og-flytning/forloeb/symmetri']]},
+    {g:1,t:'geometri',e:'Byg og tegn',tools:[],groups:[[null,['Tegne centicubefigurer fra forskellige synsvinkler; forfra, fra siden og fra oven, på isometrisk papir','Følge en foldevejledning/opskrift']]],viden:[],sk:[['Tegninger',2,'https://app.skoledu.dk/opgaver/indskoling/tegning/forloeb/tegninger']]},
+    {g:1,t:'problemregning',e:'Modellering og undersøgelser',tools:[],groups:[[null,['Hverdagssituationer beskrevet med matematik, fx købmand','Undersøgelser, måling af fx længste hop etc.']]],viden:[],sk:[['Undersøgende matematik',1,'https://app.skoledu.dk/opgaver/indskoling/undersoegelser/forloeb/undersoegende-matematik-8']]},
+
+    {g:2,t:'tal',e:'Talforståelse',tools:[],groups:[[null,['Runde op og ned','Lave overslag','Dobbelt så stort, halvt så meget','Forskel på hele, halve og dobbelt','Veksle hundreder til tusinder','Læse, skrive og ordne tal op til 9999','Bruge tælletræer']]],viden:['mathlearningcenter.org/apps'],sk:[['Større eller mindre?',2,'https://app.skoledu.dk/opgaver/indskoling/tal/forloeb/stoerre-eller-mindre'],['Store tal',2,'https://app.skoledu.dk/opgaver/indskoling/tal/forloeb/store-tal'],['Tal- og figurmønstre',2,'https://app.skoledu.dk/opgaver/indskoling/tal/forloeb/tal-og-figurmoenstre']]},
+    {g:2,t:'maaling',e:'Måling',tools:[],groups:[[null,['Måle med meter, centimeter og millimeter','Måle i gram og kilogram, deciliter og liter','Måle tid i sekunder','Klokken','Regne med tid']]],viden:[],sk:[['Længde og højde',2,'https://app.skoledu.dk/opgaver/indskoling/maaling/forloeb/laengde-og-hoejde'],['Klokken',2,'https://app.skoledu.dk/opgaver/indskoling/maaling/forloeb/klokken']]},
+    {g:2,t:'geometri',e:'Geometriske figurer og mønstre',tools:['GeoGebra – tegne trekanter og firkanter'],groups:[[null,['Figurer med samme form','Forstørre','Formindske']]],viden:[],sk:[['Former og figurer',2,'https://app.skoledu.dk/opgaver/indskoling/former-og-figurer/forloeb/former-og-figurer'],['Figurer med trekanter',2,'https://app.skoledu.dk/opgaver/indskoling/former-og-figurer/forloeb/figurer-med-trekanter']]},
+    {g:2,t:'regningsarter',e:'Addition',tools:[],groups:[[null,['Lægge flere tal sammen','Tierovergange','Veksle mellem 10’ere og 100’ere']]],viden:[],sk:[['Plus på flere måder',2,'https://app.skoledu.dk/opgaver/indskoling/plus/forloeb/plus-paa-flere-maader']]},
+    {g:2,t:'regningsarter',e:'Subtraktion',tools:[],groups:[[null,['Trække flere tal fra hinanden','Veksle 10’ere til 1’ere','Veksle mellem 10’ere og 100’ere']]],viden:[],sk:[['Flere strategier til minus',2,'https://app.skoledu.dk/opgaver/indskoling/minus/forloeb/flere-strategier-til-minus'],['Minus i hverdagen',2,'https://app.skoledu.dk/opgaver/indskoling/minus/forloeb/minus-i-hverdagen']]},
+    {g:2,t:'areal',e:'Areal og omkreds',tools:['GeoGebra – areal/omkreds'],groups:[[null,['Finde areal på forskellige måder','cm² og m²','Længde og bredde','Finde omkreds']]],viden:[],sk:[['Areal',2,'https://app.skoledu.dk/opgaver/indskoling/areal-og-omkreds/forloeb/areal'],['Omkreds',2,'https://app.skoledu.dk/opgaver/indskoling/areal-og-omkreds/forloeb/omkreds']]},
+    {g:2,t:'regningsarter',e:'Multiplikation',tools:[],groups:[[null,['Regne gangestykker','Lægge samme tal sammen flere gange','Gange i hverdagen']]],viden:['Gangesange'],sk:[['Fra plus til gange',2,'https://app.skoledu.dk/opgaver/indskoling/gange/forloeb/fra-plus-til-gange'],['At gange',2,'https://app.skoledu.dk/opgaver/indskoling/gange/forloeb/gange-0']]},
+    {g:2,t:'geometri',e:'Byg og tegn 3D-figur',tools:[],groups:[[null,['Tegne 3D på papir','Bygge figurer efter opskrift']]],viden:[],sk:[['Tegninger',2,'https://app.skoledu.dk/opgaver/indskoling/tegning/forloeb/tegninger']]},
+
+    {g:3,t:'tal',e:'Talforståelse',tools:['Google Sheets – afrunding'],groups:[[null,['Afrunding af priser','Hvad er et decimaltal?','Store tal','Overslag med priser','Romertal og egyptiske tal','Negative tal','Regne med årstal','Finde ligevægt','Regne med talmaskiner','Opdage talfølger']]],viden:['mathlearningcenter.org/apps'],sk:[['Decimaltal',3,'https://app.skoledu.dk/opgaver/indskoling/broeker-og-decimaltal/forloeb/decimaltal']]},
+    {g:3,t:'regningsarter',e:'De fire regningsarter',tools:[],groups:[[null,['Lave stykker vha. tekst/billeder – selv finde ud af hvilken regningsart der skal bruges','Påbegynde egentlig division med og uden rest','Introducere forskellige modeller']]],viden:[],sk:[['Division',3,'https://app.skoledu.dk/opgaver/indskoling/dele-og-rest/forloeb/division']]},
+    {g:3,t:'maaling',e:'Måling',tools:[],groups:[[null,['Kende forskel på m og km','Lære om afstande']]],viden:[],sk:[['Enheder',3,'https://app.skoledu.dk/opgaver/indskoling/maaling/forloeb/enheder'],['Regn med tid',3,'https://app.skoledu.dk/opgaver/indskoling/maaling/forloeb/regn-med-tid']]},
+    {g:3,t:'regningsarter',e:'Multiplikation',tools:[],groups:[[null,['De små tabeller','Gange med 10 samt større tal','Gange med hverdagstal','Udvikle metode']]],viden:[],sk:[['Regnestrategier til gange',3,'https://app.skoledu.dk/opgaver/indskoling/gange/forloeb/regnestrategier-til-gange']]},
+    {g:3,t:'funktioner',e:'Koordinatsystem',tools:['GeoGebra – sætte og aflæse punkter i koordinatsystem'],groups:[[null,['Aflæse koordinater','Afstande i et koordinatsystem']]],viden:[],sk:[['Koordinatsystemets 1. kvadrant',4,'https://app.skoledu.dk/opgaver/mellemtrin/koordinatsystemet/forloeb/koordinatsystemets-1-kvadrant']]},
+    {g:3,t:'regningsarter',e:'Division',tools:[],groups:[[null,['Division i hverdagen','Division med rest','Udvikle metode']]],viden:[],sk:[['Division',3,'https://app.skoledu.dk/opgaver/indskoling/dele-og-rest/forloeb/division']]},
+    {g:3,t:'geometri',e:'Geometri',tools:['GeoGebra – flyt figuren, drej figuren'],groups:[[null,['Skubbe figurer','Dreje figurer','Kende forskel på rette, stumpe og spidse vinkler']]],viden:[],sk:[['Vinkler',4,'https://app.skoledu.dk/opgaver/mellemtrin/plane-figurer/forloeb/vinkler']]},
+    {g:3,t:'broeker',e:'Brøker',tools:['GeoGebra – brøker og tærter, tæller og nævner'],groups:[[null,['Læse og skrive en brøk','Finde brøkdele af figurer','Finde brøkdele af antal']]],viden:[],sk:[['Brøker',3,'https://app.skoledu.dk/opgaver/indskoling/broeker-og-decimaltal/forloeb/broeker']]},
+    {g:3,t:'areal',e:'Rumfang og areal',tools:[],groups:[[null,['Finde rumfang af centicubekasser','Finde areal af udfoldede kasser','Lære betegnelsen for rumfang (cm³)']]],viden:[],sk:[['Rumfang',3,'https://app.skoledu.dk/opgaver/indskoling/rumlige-figurer/forloeb/rumfang'],['Areal og omkreds',3,'https://app.skoledu.dk/opgaver/indskoling/areal-og-omkreds/forloeb/areal-og-omkreds-0']]},
+    {g:3,t:'problemregning',e:'Problemregning',tools:[],groups:[[null,['Løse hverdagsproblemer med kendt matematik']]],viden:[],sk:[['Undersøgende matematik',3,'https://app.skoledu.dk/opgaver/indskoling/undersoegelser/forloeb/undersoegende-matematik-6']]},
+
+    {g:4,t:'regningsarter',e:'Multiplikation',tools:['Google Sheets – grundlæggende kendskab til regneark','Gangetabel.dk'],groups:[[null,['Gange er gentagen addition','Nul-regel når man ganger','Regnearters hierarki (gange og plus)','Gange 1-cifret ind i flere cifre']]],viden:['Gange-Bingo (Kontext+4)','mathlearningcenter.org/apps'],sk:[['Multiplikation',4,'https://app.skoledu.dk/opgaver/mellemtrin/multiplikation/forloeb/multiplikation']]},
+    {g:4,t:'regningsarter',e:'Division',tools:['Gangetabel.dk'],groups:[[null,['Division er det modsatte af gange','Division kan have rest','Divisionsmetoder','Fordobling','Halvering','Slikkepindsmetoden']]],viden:[],sk:[['Division',4,'https://app.skoledu.dk/opgaver/mellemtrin/division/forloeb/division-0']]},
+    {g:4,t:'geometri',e:'Geometri',tools:['GeoGebra – parallelle linjer, vinkelrette linjer, polygonværktøj, linjestykke'],groups:[[null,['Parallel','Vinkelret','Spids-, stump- og retvinkel','Trekanter og firkanter','Sildeben','Cirkel','Trapez','Parallelogram','Parallelforskydning','Højde, grundlinje, bredde, længde']]],viden:['Tangram Puzzle','Lære at tegne med en passer'],sk:[['Vinkler',4,'https://app.skoledu.dk/opgaver/mellemtrin/plane-figurer/forloeb/vinkler'],['Vinkler i trekanter',4,'https://app.skoledu.dk/opgaver/mellemtrin/plane-figurer/forloeb/vinkler-i-trekanter']]},
+    {g:4,t:'funktioner',e:'Koordinatsystemet',tools:['GeoGebra – tegne og afsætte punkter'],groups:[[null,['Kende x,y-akse i koordinatsystemet','Tegne og aflæse et koordinatsystem','Systematisk gitternet']]],viden:['Koordinatsystemet i Sigma4'],sk:[['Koordinatsystemets 1. kvadrant',4,'https://app.skoledu.dk/opgaver/mellemtrin/koordinatsystemet/forloeb/koordinatsystemets-1-kvadrant']]},
+    {g:4,t:'broeker',e:'Brøker',tools:[],groups:[[null,['Brøkers opbygning','At dele ting ligeligt','Sammenligne brøkdele','Samme del – forskellige navne','Intro til at lægge brøker sammen','Finde det hele ud fra en brøkdel']]],viden:['Konkrete materialer (Mat depot)'],sk:[['Hvad er brøker?',4,'https://app.skoledu.dk/opgaver/mellemtrin/broeker-og-procent/forloeb/hvad-er-broeker'],['Brøker på tallinjen',4,'https://app.skoledu.dk/opgaver/mellemtrin/broeker-og-procent/forloeb/broeker-paa-tallinjen']]},
+    {g:4,t:'statistik',e:'Sandsynlighedsregning, data, tabeller og diagrammer',tools:['Google Sheets – lave tabeller, tegne diagrammer'],groups:[[null,['Sammenligning af data','Tabeller/skemaer som repræsentation','Tegne søjlediagrammer','Chancer og ulighed','Beskrive chancer som brøker']]],viden:['Brætspil'],sk:[['Tabeller og diagrammer',4,'https://app.skoledu.dk/opgaver/mellemtrin/statistik/forloeb/tabeller-og-diagrammer-0'],['Chance og sandsynlighed',4,'https://app.skoledu.dk/opgaver/mellemtrin/sandsynlighed/forloeb/chance-og-sandsynlighed']]},
+    {g:4,t:'tal',e:'Talforståelse',tools:[],groups:[[null,['Talsystemets opbygning (enere, tiere …)','Brøker kan skrives som decimaltal ved division','Titalssystemet','Addition og subtraktion med decimaltal','Afrunding','Omregning mellem centimeter og meter','Negative tal','Tallinjer','Større end og mindre end','Talmønstre/tabeller']]],viden:['Kvitteringer'],sk:[['Decimaltal og positionssystemet',4,'https://app.skoledu.dk/opgaver/mellemtrin/tal/forloeb/decimaltal-og-positionssystemet'],['Negative tal',4,'https://app.skoledu.dk/opgaver/mellemtrin/tal/forloeb/negative-tal']]},
+    {g:4,t:'maaling',e:'Måling',tools:['Google Sheets – linje med given længde'],groups:[[null,['Bruge decimaltal ifm. vægt, længde og tid','Enheder som cm, kg osv.','Omregne indenfor enheder','Afrunding af decimaltal']]],viden:['Papirflyverkast (Kontext+4)','Gættekonkurrence med vægt (Kontext+4)','Måle med kroppen'],sk:[['Decimaltal og positionssystemet',4,'https://app.skoledu.dk/opgaver/mellemtrin/tal/forloeb/decimaltal-og-positionssystemet']]},
+    {g:4,t:'areal',e:'Areal og omkreds',tools:['GeoGebra – vise areal/omkreds af polygoner'],groups:[[null,['Areal og omkreds','Udregning af areal og omkreds af flade figurer','Sammenhæng og forskelle mellem areal og omkreds','Skitsetegning']]],viden:['Måle i klassen, skolen, hjemme mm.','Evt. give eleverne 1 m snor til at måle med'],sk:[['Areal og omkreds',4,'https://app.skoledu.dk/opgaver/mellemtrin/areal-og-omkreds/forloeb/areal-og-omkreds-1']]},
+    {g:4,t:'ligninger',e:'Ligninger',tools:[],groups:[[null,['Løsning af ligninger','Intro til at lave egne ligninger for rette linjer']]],viden:[],sk:[['Start med ligninger',4,'https://app.skoledu.dk/opgaver/mellemtrin/ligninger/forloeb/start-med-ligninger']]},
+
+    {g:5,t:'tal',e:'Talforståelse',tools:['GeoGebra – færdige opgaver fra Kontext+, flyt-værktøj','Google Sheets – færdige regneark fra Kontext+, sortering af data, lav diagram','Google Sheets – SUM, afrunding'],groups:[[null,['Positionssystemet','Regnehierarki','Hele tal','Regnearter','Afrunding','Overslag','Parenteser','Negative tal','Decimaltal','Procent','Brøkdele','100-dele']]],viden:['mathlearningcenter.org/apps','matematikopgaver.dk'],sk:[['Regningsarternes hierarki',5,'https://app.skoledu.dk/opgaver/mellemtrin/de-fire-regningsarter/forloeb/regningsarternes-hierarki'],['Overslagsregning',5,'https://app.skoledu.dk/opgaver/mellemtrin/de-fire-regningsarter/forloeb/overslagsregning'],['Regn med negative tal',5,'https://app.skoledu.dk/opgaver/mellemtrin/tal/forloeb/regn-med-negative-tal']]},
+    {g:5,t:'broeker',e:'Brøker',tools:['GeoGebra – færdige opgaver fra Kontext+, flyt-værktøj'],groups:[[null,['Forlænge','Forkorte','Fællesnævner','Addition/subtraktion','Brøkdel af tal','Blandede tal','Uægte brøk','Ægte brøk','Nævner, tæller, brøkstreg']]],viden:['Brøkkasse med sorterings- og vendespil (på Skjold)'],sk:[['Brøker med samme nævner',5,'https://app.skoledu.dk/opgaver/mellemtrin/broeker-og-procent/forloeb/broeker-med-samme-naevner'],['Brøker uden samme nævner',5,'https://app.skoledu.dk/opgaver/mellemtrin/broeker-og-procent/forloeb/broeker-uden-samme-naevner'],['Hvad er procent?',5,'https://app.skoledu.dk/opgaver/mellemtrin/broeker-og-procent/forloeb/hvad-er-procent']]},
+    {g:5,t:'geometri',e:'Geometri',tools:['GeoGebra – vinkelværktøj'],groups:[[null,['Spids, stump og ret vinkel','Vinkelmåler, vinkelspids, vinkelben','Ligesidet og ligebenet trekant','Skitse, målestoksforhold','Cirkelbue/cirkeludsnit','Plane figurer, diagonal','Gradtal, vinkelsum','Ligedannede figurer']]],viden:[],sk:[['Polygoners egenskaber',5,'https://app.skoledu.dk/opgaver/mellemtrin/plane-figurer/forloeb/polygoners-egenskaber'],['Højder og egenskaber',5,'https://app.skoledu.dk/opgaver/mellemtrin/plane-figurer/forloeb/hoejder-og-egenskaber']]},
+    {g:5,t:'funktioner',e:'Koordinatsystemet',tools:['GeoGebra – indsæt punkter og linjer'],groups:[[null,['Koordinatsystem, kvadranter','1. og 2. koordinat/akse','x- og y-koordinat/akse','Tallinje, millimeterpapir','Graf, kurve']]],viden:[],sk:[['Hele koordinatsystemet',5,'https://app.skoledu.dk/opgaver/mellemtrin/koordinatsystemet/forloeb/hele-koordinatsystemet']]},
+    {g:5,t:'areal',e:'Rumfang, areal og omkreds',tools:['GeoGebra – isometrisk tegning','Google Sheets – skema til udregning af rumfang'],groups:[[null,['Rumfang, overfladeareal','Kubik-cm/dm/m','Isometrisk papir','Omregning ml. enheder','Længde/bredde/højde, arbejdstegning','Areal, cirkelformler','Diameter, radius, pi','Omkreds, volume, liter']]],viden:[],sk:[['Rumfang og måleenheder',5,'https://app.skoledu.dk/opgaver/mellemtrin/rumlige-figurer/forloeb/rumfang-og-maaleenheder'],['Rumfang af kasser',5,'https://app.skoledu.dk/opgaver/mellemtrin/rumlige-figurer/forloeb/rumfang-af-kasser'],['Mere om areal og omkreds',5,'https://app.skoledu.dk/opgaver/mellemtrin/areal-og-omkreds/forloeb/mere-om-areal-og-omkreds']]},
+    {g:5,t:'ligninger',e:'Tal, ligninger og bogstaver',tools:[],groups:[[null,['Reducering','Regnehierarki','Formler','Variable','Mønstre']]],viden:[],sk:[['Ligninger med x',5,'https://app.skoledu.dk/opgaver/mellemtrin/ligninger/forloeb/ligninger-med-x'],['Sammenhænge',5,'https://app.skoledu.dk/opgaver/mellemtrin/funktioner/forloeb/sammenhaenge']]},
+    {g:5,t:'statistik',e:'Sandsynlighedsregning, diagrammer og tabeller',tools:['Google Sheets – udregn gennemsnit med formel i celle','Google Sheets – lav tabeller, sorter data, tegn diagrammer'],groups:[[null,['Data, størsteværdi, mindsteværdi','Gennemsnit/middeltal/middelværdi','Hyppighed, typetal','Chance, sandsynlighed','Median','Observation, observationssæt, undersøgelse','Hyppighedstabel','Kombinationer','Sammenligne datasæt','Tællemodeller for antal muligheder','Aflæse og tolke data i tabeller og skemaer','Beregne og eksperimentere med chancen for at noget sker']]],viden:[],sk:[['Lav egne undersøgelser',5,'https://app.skoledu.dk/opgaver/mellemtrin/statistik/forloeb/lav-egne-undersoegelser'],['Simuleringer',5,'https://app.skoledu.dk/opgaver/mellemtrin/sandsynlighed/forloeb/simuleringer']]},
+    {g:5,t:'regningsarter',e:'Ugeaflevering',tools:[],groups:[[null,['Går op / går ikke op','Division, deling','Overslag','Slikkepindsmetoden','Valg af regningsart']]],viden:[],sk:[['Mere om division',5,'https://app.skoledu.dk/opgaver/mellemtrin/division/forloeb/mere-om-division']]},
+
+    {g:6,t:'ligninger',e:'Ugeaflevering – CAS-værktøj',tools:['CAS-værktøj fra Wiz-kids (muligvis Equatio)'],groups:[[null,['Ligningsfunktionen','Matematiske funktioner','Relationer']]],viden:['mathlearningcenter.org/apps'],sk:[]},
+    {g:6,t:'tal',e:'Talforståelse',tools:['Google Sheets – formler/autosum, kopiere formler, ændre cellefarver, tegne diagrammer, andre formler'],groups:[[null,['Sammenligne størrelsen på brøker','Decimaltal fra tiendedele til tusindedele','Sammenhæng mellem brøktal, decimaltal og procent','Regne med brøker (regnearter)','Beskrive forhold mellem to talmængder','Kvadrattal og kvadratrod','Et kort gengiver virkeligheden i et bestemt målestoksforhold']]],viden:[],sk:[['Kvadrattal og kubiktal',6,'https://app.skoledu.dk/opgaver/mellemtrin/tal/forloeb/kvadrattal-og-kubiktal']]},
+    {g:6,t:'geometri',e:'Geometri',tools:['GeoGebra – måle vinkler, afsætte vinkler med given størrelse, tegne polygoner med given størrelse, linjestykke med given længde, vise areal','GeoGebra – regneark, regulære polygoner, spejlingsværktøjet, parallelle/vinkelrette linjer','GeoGebra – isometrisk tegning, dreje om et punkt, parallelforskyd med vektor'],groups:[[null,['Polygoner: trapez, rombe, parallellogrammer','Konstruere cirkler og udsnit af cirkler','Finde omkredsen af en cirkel','Anvende radius og diameter til beskrivelse af cirkler','Forholdet mellem en cirkels diameter og omkreds','Beregne cirklers arealer','Anvende passer og digitale værktøjer til konstruktion','Beregne arealet af forskellige typer trekanter og firkanter','Sammenhæng mellem vinkelstørrelse og sidestørrelse i trekanter','Konstruere forskellige typer trekanter og firkanter på papir og med digitale værktøjer','Forskellige typer trekanter, firkanter og kantede figurer','At to figurer kan have samme form men forskellig størrelse','Egenskaberne ved enkle rumlige figurer som cylindre og kasser','Beregne rumfanget af kasser og cylindre','Omsætte mellem rummål','Anvende isometrisk tegning, projektionstegning og perspektivisk tegning','Beskrive og beregne overflader på enkle rumlige figurer','Nogle særlige polyedre','Hvad et mønster er, og hvordan man beskriver det med grundfigurer der gentager sig','Anvende GeoGebra til spejlinger, parallelforskydninger og drejninger','Dreje, parallelforskyde og spejle på papir']]],viden:['Forsøg med GeoGebra-fil om diameter og omkreds ved cirkler (Skjoldborgsvej MVR)','Tinkercad','Forløb med 3D-tegning og -print (Skjoldborgsvej, evt. MakerSpace)'],sk:[['Vinklers sammenhænge',6,'https://app.skoledu.dk/opgaver/mellemtrin/plane-figurer/forloeb/vinklers-sammenhaenge'],['Rumlige figurer',6,'https://app.skoledu.dk/opgaver/mellemtrin/rumlige-figurer/forloeb/rumlige-figurer'],['Cirklens areal og omkreds',6,'https://app.skoledu.dk/opgaver/mellemtrin/areal-og-omkreds/forloeb/cirklens-areal-og-omkreds'],['Mønstre',6,'https://app.skoledu.dk/opgaver/mellemtrin/placering-og-flytning/forloeb/moenstre']]},
+    {g:6,t:'problemregning',e:'Problemregning',tools:['Google Sheets – formel autosum, kopiere formler, sortere celler, tegne søjle-/pindediagram'],groups:[[null,['Vælge den rigtige regningsart til spørgsmål inden for handel','Udregne procentdelen af et beløb','Udregne en procentvis ændring, fx rabat','Anvende overslag og afrunding','Videreudvikle regnestrategier inden for de fire regningsarter','Regne med negative tal','Lægge et budget']]],viden:[],sk:[['Regn med procent',6,'https://app.skoledu.dk/opgaver/mellemtrin/broeker-og-procent/forloeb/regn-med-procent'],['Regneark i hverdagen',6,'https://app.skoledu.dk/opgaver/mellemtrin/de-fire-regningsarter/forloeb/regneark-i-hverdagen']]},
+    {g:6,t:'statistik',e:'Data og sandsynlighedsregning',tools:['Google Sheets – tegne søjle-/pindediagram, formler, akseetiketter i diagram'],groups:[[null,['Ordne og sortere datasæt','Særlige talværdier der beskriver et datasæt','Anvende gennemsnit','Beregne frekvens','Sammenligne datasæt','Tællemodeller til at finde antal muligheder','Aflæse og tolke data i tabeller og skemaer','Beregne chancen for at noget sker','Ved eksperiment beskrive chancen for at noget sker']]],viden:[],sk:[['Begreber i statistik',6,'https://app.skoledu.dk/opgaver/mellemtrin/statistik/forloeb/begreber-i-statistik'],['Sæt tal på sandsynlighed',6,'https://app.skoledu.dk/opgaver/mellemtrin/sandsynlighed/forloeb/saet-tal-paa-sandsynlighed']]},
+    {g:6,t:'ligninger',e:'Tal, ligninger og bogstaver',tools:['Wizkids-CAS – ligningsfunktionen','Google Sheets – tegne kurvediagram, akseetiketter i diagram'],groups:[[null,['Beskrive enkle sammenhænge ved brug af grafer, tabeller og formler','Aflæse og tolke grafer','Opstille og løse enkle ligninger','Tegne et koordinatsystem med passende enheder i forhold til sammenhængen der skal beskrives']]],viden:[],sk:[['Mere om ligninger',6,'https://app.skoledu.dk/opgaver/mellemtrin/ligninger/forloeb/mere-om-ligninger'],['Figurfølger og algebra',6,'https://app.skoledu.dk/opgaver/mellemtrin/funktioner/forloeb/figurfoelger-og-algebra'],['Lineære sammenhænge',6,'https://app.skoledu.dk/opgaver/mellemtrin/funktioner/forloeb/lineaere-sammenhaenge']]},
+
+    {g:7,t:'tal',e:'Tal og algebra',tools:['Google Sheets'],groups:[['Repetition',['Enheder for længde, vægt og fart','Omregne mellem enheder','Sammenhæng mellem fart, længde og tid','Variabler','Negative tal','Regnehierarki – parentesregler, reducere, potenser']]],viden:[],sk:[['Addition og subtraktion (Repetition)',7,'https://app.skoledu.dk/opgaver/udskoling/de-fire-regningsarter/forloeb/addition-og-subtraktion-repetition'],['Multiplikation (Repetition)',7,'https://app.skoledu.dk/opgaver/udskoling/de-fire-regningsarter/forloeb/multiplikation-repetition'],['Division (Repetition)',7,'https://app.skoledu.dk/opgaver/udskoling/de-fire-regningsarter/forloeb/division-repetition'],['Regningsarternes hierarki (Repetition)',7,'https://app.skoledu.dk/opgaver/udskoling/de-fire-regningsarter/forloeb/regningsarternes-hierarki-repetition']]},
+    {g:7,t:'areal',e:'Areal, omkreds og rumfang',tools:['GeoGebra – repetition af de basale funktioner'],groups:[['Repetition',['Højde, grundlinje, radius, diameter, areal, omkreds, rumfang, pi π, trapez, rombe, parallelogram']],['Ny viden',['Polyeder: cylinder, pyramide, kugle, keglestub, kube','Polygoner – konkav figur']]],viden:[],sk:[['Areal og omkreds',7,'https://app.skoledu.dk/opgaver/udskoling/maaling/forloeb/areal-og-omkreds'],['Prismer og pyramider',7,'https://app.skoledu.dk/opgaver/udskoling/rumlige-figurer/forloeb/prismer-og-pyramider']]},
+    {g:7,t:'broeker',e:'Brøker',tools:[],groups:[['Repetition',['Tæller, nævner, fællesnævner, brøkstreg','Forlænge og forkorte brøker','Regne med brøker – plus og minus','Sammenhæng af brøk, decimaltal og procent','Brøker i hverdagen']],['Ny viden',['Plus og minus med brøker','Gange to brøker','Dividere to brøker','Omskrive brøker til blandet tal og omvendt','Ægte og uægte brøker, blandet tal']]],viden:[],sk:[['Regn med brøker',7,'https://app.skoledu.dk/opgaver/udskoling/broeker-og-procent/forloeb/regn-med-broeker']]},
+    {g:7,t:'procent',e:'Procent',tools:[],groups:[['Repetition',['0,4 = 40 %','Tage en del af helheden og finde hvad det er i procent','Finde helheden ud fra en brøkdel og ud fra procent','Omregn mellem decimaltal og procent']]],viden:[],sk:[['Procent',7,'https://app.skoledu.dk/opgaver/udskoling/broeker-og-procent/forloeb/procent']]},
+    {g:7,t:'ligninger',e:'Ligninger',tools:['CAS-værktøj'],groups:[['Repetition',['Hvad er en variabel? Hvad er en ubekendt?']],['Ny viden',['Regneregler: reduktion, plusparentes, minusparentes, gange ind i parenteser, hæve parenteser','Led i ligninger','Regnehierarki']]],viden:[],sk:[['Algebra',7,'https://app.skoledu.dk/opgaver/udskoling/ligninger/forloeb/algebra'],['Strategier til ligningsløsning',7,'https://app.skoledu.dk/opgaver/udskoling/ligninger/forloeb/strategier-til-ligningsloesning']]},
+    {g:7,t:'funktioner',e:'Funktioner',tools:['GeoGebra'],groups:[['Repetition',['Koordinatsæt (x;y)','Koordinatsystemet, x- og y-akse','Sildeben/tabel']],['Ny viden',['Lineære og ikke-lineære funktioner','Linjens ligning: f(x) = ax + b – skæringspunkt på y-aksen, hældningskoefficienten','Funktionsforskrift','Skæringspunkter med akser og andre linjer','Sammenhængen mellem sproglig beskrivelse, en ligning, en tabel og en graf']]],viden:[],sk:[['Lineære funktioner',7,'https://app.skoledu.dk/opgaver/udskoling/funktioner/forloeb/lineaere-funktioner']]},
+    {g:7,t:'statistik',e:'Statistik og sandsynlighed',tools:['Google Sheets','GeoGebra'],groups:[['Repetition',['Tabel, tælletræ','Sandsynlighed, chance, hyppighed, udfald','Typetal, median, største- og mindsteværdi, variationsbredde','Hyppighedstabel','Diagramtyper: cirkel, punkt, pinde, søjle, kurve osv.']],['Ny viden',['Summeret hyppighed, summeret frekvens','Simuleringsprogram','Chancetræer','Intervaller: ]xx;xx] og [xx;xx[','Chanceeksperimenter – chance og udfald: terning, mønt, kort']]],viden:[],sk:[['Statistiske deskriptorer',7,'https://app.skoledu.dk/opgaver/udskoling/statistik/forloeb/statistiske-deskriptorer'],['Sandsynlighed og tællemåder',7,'https://app.skoledu.dk/opgaver/udskoling/sandsynlighed/forloeb/sandsynlighed-og-taellemaader']]},
+    {g:7,t:'geometri',e:'Geometri (tegning og konstruktion)',tools:['GeoGebra'],groups:[['Repetition',['Længde, bredde','Vinkler, vinkelsummer','Ret-, stump- og spidsvinklet trekant','Ligesidet og ligebenet trekant','Grundlinje, højde, punkter, skæringspunkt, radius','Parallelle, diagonaler, målestoksforhold','Korde, diameter, radius','Spejlingsakser, forskydninger, drejninger']],['Ny viden',['Symmetri, symmetriakser','Kongruens','Perspektivtegning – isometrisk papir, klassisk tegning, geometriprogram (GeoGebra)','Forskel på plantegning, perspektivtegning og skitse','Grundlæggende viden om konstruktioner','Forsvindingspunkt, horisontlinjen','Frontperspektiv, krydsperspektiv']]],viden:['Vinkelmåler','Passer'],sk:[['Regler for vinkler',7,'https://app.skoledu.dk/opgaver/udskoling/plane-figurer/forloeb/regler-vinkler'],['Forskellige tegneformer',7,'https://app.skoledu.dk/opgaver/udskoling/geometrisk-tegning/forloeb/forskellige-tegneformer'],['Flytninger',7,'https://app.skoledu.dk/opgaver/udskoling/placering-og-flytning/forloeb/flytninger']]},
+    {g:7,t:'problemregning',e:'Problemregning',tools:[],groups:[[null,['Opstilling af problemregning','Layout, sidehoved, sidetal','Tydelig udregning/beregning og resultat','Skal være en forklaring på deres opgave','Matematisk rigtigt opstillet – “2 + 2 = 4 + 2 = 6” er forkert']]],viden:[],sk:[['Undersøgende matematik',7,'https://app.skoledu.dk/opgaver/udskoling/undersoegelser/forloeb/undersoegende-matematik-3']]},
+
+    {g:8,t:'tal',e:'Tal og algebra',tools:['Google Sheets'],groups:[['Ny viden',['Kvadrattal','Reduktion','Kvadratsætninger','Talmængder: naturlige tal, hele tal, rationale tal, irrationale tal, reelle tal','Kvadrat- og kubikrødder','Videnskabelig notation, fx 1,23 · 10⁷']],['Repetition',['Potenser','Negative tal','Regnehierarki, parentesregler','Algebraiske udtryk, omskrivning']]],viden:[],sk:[['Potenser',8,'https://app.skoledu.dk/opgaver/udskoling/tal/forloeb/potenser']]},
+    {g:8,t:'areal',e:'Areal, omkreds og rumfang',tools:[],groups:[[null,['Overfladeareal','Rumfang: kegle, keglestub, kube, kugle, pyramide, cylinder']]],viden:[],sk:[['Kuglen og andre figurer',8,'https://app.skoledu.dk/opgaver/udskoling/rumlige-figurer/forloeb/kuglen-og-andre-figurer'],['Måleenheder',8,'https://app.skoledu.dk/opgaver/udskoling/maaling/forloeb/maaleenheder']]},
+    {g:8,t:'broeker',e:'Brøker',tools:[],groups:[['Repetition',['Tæller, nævner, fællesnævner, brøkstreg','Forlænge og forkorte brøker','Regne med brøker','Sammenhæng af brøk, decimaltal og procent','Brøker i hverdagen']],['Ny viden – regne med brøker',['Gange to brøker','Dividere to brøker','Omskrive brøker til blandet tal og omvendt','Ægte og uægte brøker, blandet tal']]],viden:[],sk:[['Vækst i procent',8,'https://app.skoledu.dk/opgaver/udskoling/broeker-og-procent/forloeb/vaekst-i-procent']]},
+    {g:8,t:'procent',e:'Procent',tools:[],groups:[['Ny viden',['Procentændringer: stigning/fald i fx priser','Procentpoint']],['Repetition',['Del af helheden i procent','Helheden ud fra en brøkdel og ud fra procent','Omregn mellem decimaltal og procent (0,4 = 40 %)']]],viden:[],sk:[['Vækst i procent',8,'https://app.skoledu.dk/opgaver/udskoling/broeker-og-procent/forloeb/vaekst-i-procent']]},
+    {g:8,t:'ligninger',e:'Ligninger',tools:[],groups:[['Ny viden',['Ligninger med én og to ubekendte','Anvendelse af ligninger i tekstopgaver']],['Repetition',['Regnehierarki','Reduktion','Kvadratsætninger']]],viden:[],sk:[['Regler for algebra',8,'https://app.skoledu.dk/opgaver/udskoling/ligninger/forloeb/regler-algebra'],['Ligninger til problemløsning',8,'https://app.skoledu.dk/opgaver/udskoling/ligninger/forloeb/ligninger-til-problemloesning']]},
+    {g:8,t:'funktioner',e:'Funktioner',tools:['GeoGebra'],groups:[['Ny viden',['Lineære og ikke-lineære funktioner','Fortolkning af grafer: x- og y-aksen, stigning, fald eller konstant værdi','Tendenslinjer','Matematiske relationer bag grafen: fx lineær vækst, stykkevis lineær vækst og eksponentiel vækst','Hvornår funktionsforskrifter er parallelle eller skærer hinanden','Sammenhæng mellem tabel, graf og ligning']],['Repetition',['Funktionsforskrifter','Hældningskoefficienten, skæring med y-aksen: f(x) = ax + b']]],viden:[],sk:[['Mere om lineære funktioner',8,'https://app.skoledu.dk/opgaver/udskoling/funktioner/forloeb/mere-om-lineaere-funktioner']]},
+    {g:8,t:'statistik',e:'Statistik og sandsynlighed',tools:['Google Sheets','GeoGebra','Simuleringsværktøjer, fx matematikbanken.dk/simulering'],groups:[['Ny viden',['Boksplot – <strong>brug ikke Google Sheets</strong>, men GeoGebra','Kvartilsæt: nedre/1. kvartil, median, øvre/3. kvartil','Hyppighed og frekvens: summeret hyppighed, summeret frekvens, intervaller','Forskel mellem observationer og observationssæt, ordnede/uordnede observationssæt','Chanceeksperimenter: terning, mønt, kort, stikprøve']],['Repetition',['Middelværdi, typetal, sandsynlighed, kombinatorik, simulering, variationsbredde, median','Diagramtyper: cirkel, punkt, pinde, søjle, kurve osv.']]],viden:[],sk:[['Sammenligninger i statistik',8,'https://app.skoledu.dk/opgaver/udskoling/statistik/forloeb/sammenligninger-i-statistik'],['Analyser og tendenser',8,'https://app.skoledu.dk/opgaver/udskoling/statistik/forloeb/analyser-og-tendenser'],['Sammensat sandsynlighed',8,'https://app.skoledu.dk/opgaver/udskoling/sandsynlighed/forloeb/sammensat-sandsynlighed']]},
+    {g:8,t:'geometri',e:'Geometri',tools:['GeoGebra'],groups:[['Ny viden',['Pythagoras’ sætning','Spejling, drejning og parallelforskydning','Forskel på ligedannede og kongruente figurer','Topvinkler, ensliggende vinkler og nabovinkel','Midtnormaler, median, vinkelhalveringslinjer','Omskrevne og indskrevne cirkel, midtpunkt, midtpunktstransversal']],['Repetition',['Konstruktion af vinkler og figurer','Kongruens, symmetri, målestoksforhold']]],viden:['Isometrisk papir'],sk:[['Pythagoras’ sætning',8,'https://app.skoledu.dk/opgaver/udskoling/plane-figurer/forloeb/pythagoras-saetning'],['Kongruens og ligedannethed',8,'https://app.skoledu.dk/opgaver/udskoling/plane-figurer/forloeb/kongruens-og-ligedannethed'],['Linjer og vinkler i polygoner',8,'https://app.skoledu.dk/opgaver/udskoling/plane-figurer/forloeb/linjer-og-vinkler-i-polygoner']]},
+    {g:8,t:'trigonometri',e:'Trigonometri',tools:['Lommeregner: lommeregner.org'],groups:[[null,['Sinus, cosinus og tangens','Modstående og hosliggende katete','Hypotenusen','Lommeregner: fra RAD til DEG, omstille til sin⁻¹, cos⁻¹ og tan⁻¹']]],viden:[],sk:[['Trigonometri',9,'https://app.skoledu.dk/opgaver/udskoling/plane-figurer/forloeb/trigonometri']]},
+    {g:8,t:'oekonomi',e:'Økonomi',tools:['Google Sheets'],groups:[[null,['Budget, opsparing','Rente – renteformel 1: R = K·r·d/360','Rente – renteformel 2: Kₙ = K(1+r)ⁿ','Moms, saldo, termin, kapital, rentesats, vækst','Prisudvikling og forbrug','Valutakurser']]],viden:[],sk:[['Opsparing',8,'https://app.skoledu.dk/opgaver/udskoling/oekonomi/forloeb/opsparing']]},
+    {g:8,t:'problemregning',e:'Problemregning',tools:['Google Sheets','GeoGebra – regneark'],groups:[[null,['Formler: =sum(, =gns(, =maks(, =min(','Brug af de fire regningsarter i Sheets','Kopiere formler','Ordne og sortere datasæt','Diagrammer: kolonner, redigering af akser, dataetiketter','Klippe/kopiere fra matematisk værktøj over i Google Docs']],['Repetition',['Opstilling af problemregning: layout, sidehoved, sidetal','Tydelig udregning/beregning og resultat, forklaring på opgaven','Matematisk rigtigt opstillet']]],viden:[],sk:[['Regneark',8,'https://app.skoledu.dk/opgaver/udskoling/temaer/forloeb/regneark'],['Konstruktioner i GeoGebra',8,'https://app.skoledu.dk/opgaver/udskoling/temaer/forloeb/konstruktioner-i-geogebra']]},
+
+    {g:9,t:'tal',e:'Tal og algebra',tools:[],groups:[['Ny viden',['Kvadratroden, kubikroden og den fjerde rod osv. – regneregler for rødder','Omskriv kvadratroden til potens','Regneregler for potenser – eksponent og rod','Faktorisering, fx 5x + 5 = 5(x+1)']],['Repetition',['Kvadratsætninger','Regneregler med negative tal']]],viden:[],sk:[['Rødder og andre tal',9,'https://app.skoledu.dk/opgaver/udskoling/tal/forloeb/roedder-og-andre-tal']]},
+    {g:9,t:'areal',e:'Areal, omkreds og rumfang',tools:[],groups:[[null,['Repetition af formler for de forskellige figurer','Enhedsomregning']]],viden:[],sk:[['Rumfang og vægt',9,'https://app.skoledu.dk/opgaver/udskoling/rumlige-figurer/forloeb/rumfang-og-vaegt'],['Mål på flader',9,'https://app.skoledu.dk/opgaver/udskoling/maaling/forloeb/maal-paa-flader']]},
+    {g:9,t:'broeker',e:'Brøker',tools:[],groups:[[null,['Regneregler med brøker i ligninger','Brøker i procent- og renteberegninger','Brøker i ligninger og funktioner','Sammenhæng mellem brøk, decimaltal og procent']]],viden:[],sk:[['Brøker og procent i hverdagen',9,'https://app.skoledu.dk/opgaver/udskoling/broeker-og-procent/forloeb/broeker-og-procent-i-hverdagen']]},
+    {g:9,t:'procent',e:'Procent',tools:[],groups:[['Ny viden',['Promille']],['Repetition',['Fra 7. og 8. klasse']]],viden:[],sk:[['Brøker og procent i hverdagen',9,'https://app.skoledu.dk/opgaver/udskoling/broeker-og-procent/forloeb/broeker-og-procent-i-hverdagen']]},
+    {g:9,t:'ligninger',e:'Ligninger',tools:[],groups:[[null,['Uligheder – ulighedstegn i en ligning','Uligheder med én og to ubekendte','Ligninger og uligheder med flere ubekendte','Aflæse uligheder i grafer','Andengradsligning']]],viden:[],sk:[['Ligninger med to ubekendte',9,'https://app.skoledu.dk/opgaver/udskoling/ligninger/forloeb/ligninger-med-ubekendte'],['Ligninger og CAS',9,'https://app.skoledu.dk/opgaver/udskoling/ligninger/forloeb/ligninger-og-cas']]},
+    {g:9,t:'funktioner',e:'Funktioner',tools:['Google Sheets','GeoGebra'],groups:[[null,['Sammenhæng mellem tabel, graf og ligning','Funktioner: ligefrem proportionalitet, omvendt proportionalitet/hyperbel, andengradsfunktion/parabel, eksponentiel funktion']]],viden:[],sk:[['Ikke-lineære funktioner',9,'https://app.skoledu.dk/opgaver/udskoling/funktioner/forloeb/ikke-lineaere-funktioner']]},
+    {g:9,t:'statistik',e:'Statistik og sandsynlighed',tools:[],groups:[['Ny viden',['Analysere data om økonomiske tendenser']],['Repetition',['Fra 8. årgang']]],viden:[],sk:[['Manipulation',9,'https://app.skoledu.dk/opgaver/udskoling/statistik/forloeb/manipulation'],['Sandsynligheder i verden',9,'https://app.skoledu.dk/opgaver/udskoling/sandsynlighed/forloeb/sandsynligheder-i-verden']]},
+    {g:9,t:'geometri',e:'Geometri (tegning og konstruktion)',tools:[],groups:[[null,['Anvendelse af trigonometri i konstruktioner','Rumdiagonaler']]],viden:[],sk:[['Tegn med mål',9,'https://app.skoledu.dk/opgaver/udskoling/geometrisk-tegning/forloeb/tegn-med-maal']]},
+    {g:9,t:'trigonometri',e:'Trigonometri',tools:['GeoGebra','Lommeregner: lommeregner.org'],groups:[[null,['Sinus, cosinus og tangens i retvinklede trekanter','Anvendelse i konstruktioner og beregninger','Sammenhæng med geometri og funktioner','Beregning af afstande og højder','Enhedscirklen','Lommeregner: fra RAD til DEG, omstille til sin⁻¹, cos⁻¹ og tan⁻¹']]],viden:[],sk:[['Trigonometri',9,'https://app.skoledu.dk/opgaver/udskoling/plane-figurer/forloeb/trigonometri'],['Bevis for Pythagoras’ sætning',9,'https://app.skoledu.dk/opgaver/udskoling/plane-figurer/forloeb/bevis-pythagoras-saetning']]},
+    {g:9,t:'oekonomi',e:'Økonomi',tools:['Google Sheets'],groups:[[null,['Privatøkonomi og samfundsøkonomi: budget','Løn, skat, moms, AM-bidrag, ATP','A-indkomst, nettoløn, trækprocent (frikort)','Opsparing, ÅOP og renter, afbetaling','Lån: annuitetslån, stående lån, serielån','Regression','Begreber: ydelse, afdrag, nominel rente','(Gambling, betting)','Valutakurser']]],viden:[],sk:[['Lån',9,'https://app.skoledu.dk/opgaver/udskoling/oekonomi/forloeb/laan']]},
+    {g:9,t:'problemregning',e:'Problemregning',tools:['Google Sheets','GeoGebra','Lommeregner'],groups:[[null,['Eksamensforberedelse','Anvendelse af matematiske begreber i kontekst','Brug af regneark til beregninger og visualisering']]],viden:['Regneregler.dk','webmatematik.dk'],sk:[['Chokolade',9,'https://app.skoledu.dk/opgaver/udskoling/temaer/forloeb/chokolade']]}
+  ];
+
+  // ---------- helpers ----------
+  function linkify(str){
+    return str.replace(/((https?:\/\/[^\s]+)|([a-z0-9-]+\.(dk|org|com|net)(\/[^\s]*)?))/gi, function(m){
+      var href = /^https?:\/\//i.test(m) ? m : 'https://' + m;
+      return '<a href="'+href+'" target="_blank" rel="noopener">'+m+'</a>';
+    });
+  }
+
+  function slugify(str){
+    return str.toLowerCase()
+      .replace(/æ/g,'ae').replace(/ø/g,'o').replace(/å/g,'aa')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+  }
+
+  var LINK_ICON = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M10 14a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>';
+  function copyLinkBtn(id){
+    return '<button type="button" class="copy-link" data-target="'+id+'" title="Kopiér link til dette afsnit" aria-label="Kopiér link til dette afsnit">'+LINK_ICON+'</button>';
+  }
+
+  function topicDetailHTML(entry){
+    var html = '';
+    if(entry.sk && entry.sk.length){
+      var hasOffset = entry.sk.some(function(s){ return s[1] !== entry.g; });
+      html += '<div class="detail-block"><h4 class="sk-heading"><span class="sk-dot"></span>Skoledu-forløb</h4><ul class="chips sk-links">'+entry.sk.map(function(s){
+        var offset = s[1] !== entry.g;
+        var cls = offset ? 'sk-link sk-link-offset' : 'sk-link';
+        var titleAttr = offset ? ' title="Nærmeste forløb hos Skoledu – ligger på deres '+s[1]+'. klassetrin, ikke '+entry.g+'. klasse her"' : '';
+        return '<li><a class="'+cls+'" href="'+s[2]+'" target="_blank" rel="noopener"'+titleAttr+'>'+s[0]+'<span class="sk-grade">'+s[1]+'. kl.'+(offset ? ' <span class="sk-offset-mark">↕</span>' : '')+'</span><svg class="sk-ext" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17 17 7M9 7h8v8"/></svg></a></li>';
+      }).join('')+'</ul>'+(hasOffset ? '<p class="sk-offset-note">↕ Stiplet ramme = forløbet ligger på et andet klassetrin hos Skoledu, men er fagligt tættest på dette emne.</p>' : '')+'</div>';
+    }
+    if(entry.tools && entry.tools.length){
+      html += '<div class="detail-block"><h4>IT-værktøj</h4><ul class="chips">'+entry.tools.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+    }
+    entry.groups.forEach(function(g){
+      var label = g[0] || 'Faglige begreber';
+      var items = g[1];
+      html += '<div class="detail-block"><h4>'+label+'</h4><ul class="begreb-list">'+items.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+    });
+    if(entry.viden && entry.viden.length){
+      html += '<div class="detail-block"><h4>Vidensbank</h4><ul class="begreb-list">'+entry.viden.map(function(x){return '<li>'+linkify(x)+'</li>';}).join('')+'</ul></div>';
+    }
+    return html;
+  }
+
+  function searchText(entry){
+    var parts = [entry.e];
+    entry.groups.forEach(function(g){ parts = parts.concat(g[1]); });
+    parts = parts.concat(entry.tools || [], entry.viden || []);
+    if(entry.sk) parts = parts.concat(entry.sk.map(function(s){ return s[0]; }));
+    return parts.join(' ').toLowerCase();
+  }
+
+  // ---------- render: by grade ----------
+  function renderGradeView(){
+    var byGrade = {};
+    TOPICS.forEach(function(e){ (byGrade[e.g] = byGrade[e.g] || []).push(e); });
+
+    var stageOrder = ['indskoling','mellemtrin','udskoling'];
+    var html = '';
+    stageOrder.forEach(function(stageId){
+      var info = STAGE_INFO[stageId];
+      var gradesInStage = Object.keys(STAGE_OF_GRADE).map(Number).filter(function(g){ return STAGE_OF_GRADE[g]===stageId; });
+      html += '<section class="stage stage-'+stageId+'">';
+      html += '<div class="stage-head"><h2>'+info.label+'</h2><span class="range">'+info.range+'</span></div>';
+      if(info.opmaerksomhed){
+        html += '<details class="opmaerksomhed"><summary>Opmærksomhedspunkter</summary><ul>';
+        info.opmaerksomhed.forEach(function(p){
+          html += '<li>'+p[0]+'<br><span class="kompetence">'+p[1]+'</span></li>';
+        });
+        html += '</ul></details>';
+      }
+      html += '<div class="grades">';
+      gradesInStage.forEach(function(g){
+        var topics = byGrade[g] || [];
+        var gradeId = 'grade-'+g;
+        html += '<details class="grade" data-grade="'+g+'" id="'+gradeId+'">';
+        html += '<summary><span class="grade-num">'+g+'. klasse</span><span class="grade-emne-count">'+topics.length+' emner</span>'+copyLinkBtn(gradeId)+'<span class="chev">›</span></summary>';
+        html += '<div class="topics">';
+        topics.forEach(function(entry){
+          var topicId = 'g'+g+'-'+slugify(entry.e);
+          html += '<details class="topic" id="'+topicId+'" data-search="'+searchText(entry).replace(/"/g,'\'')+'">';
+          html += '<summary><span>'+entry.e+'</span>'+copyLinkBtn(topicId)+'<span class="chev">›</span></summary>';
+          html += '<div class="topic-body">'+topicDetailHTML(entry)+'</div>';
+          html += '</details>';
+        });
+        html += '</div></details>';
+      });
+      html += '</div></section>';
+    });
+    document.getElementById('view-grade').innerHTML = html;
+  }
+
+  // ---------- render: by thread ----------
+  function renderThreadView(){
+    var byThread = {};
+    TOPICS.forEach(function(e){
+      byThread[e.t] = byThread[e.t] || {};
+      (byThread[e.t][e.g] = byThread[e.t][e.g] || []).push(e);
+    });
+
+    var html = '';
+    THREAD_ORDER.forEach(function(tid){
+      var map = byThread[tid] || {};
+      var grades = Object.keys(map).map(Number).sort(function(a,b){return a-b;});
+      if(!grades.length) return;
+
+      var dots = '';
+      for(var g=1; g<=9; g++){
+        var has = map[g];
+        var stage = STAGE_OF_GRADE[g];
+        var dotTitle = g+'. klasse'+(has ? ' – '+has.map(function(x){return x.e;}).join(', ') : '');
+        dots += '<span class="dot'+(has?' on stage-'+stage:'')+'" title="'+dotTitle+'"></span>';
+      }
+
+      var threadId = 'thread-'+tid;
+      html += '<details class="thread" data-thread="'+tid+'" id="'+threadId+'">';
+      html += '<summary><span class="thread-title">'+THREAD_LABELS[tid]+'</span><span class="thread-dots">'+dots+'</span><span class="thread-range">'+grades[0]+'.–'+grades[grades.length-1]+'. kl.</span>'+copyLinkBtn(threadId)+'<span class="chev">›</span></summary>';
+      html += '<div class="thread-body"><div class="thread-entries">';
+      grades.forEach(function(g){
+        var stage = STAGE_OF_GRADE[g];
+        map[g].forEach(function(entry){
+          var teId = 't-'+tid+'-g'+g+'-'+slugify(entry.e);
+          html += '<details class="thread-entry stage-'+stage+'" id="'+teId+'" data-search="'+searchText(entry).replace(/"/g,'\'')+'">';
+          html += '<summary><span class="te-grade">'+g+'.</span><span class="te-emne">'+entry.e+'</span>'+copyLinkBtn(teId)+'</summary>';
+          html += '<div class="te-body">'+topicDetailHTML(entry)+'</div>';
+          html += '</details>';
+        });
+      });
+      html += '</div></div></details>';
+    });
+    document.getElementById('threads-container').innerHTML = html;
+  }
+
+  renderGradeView();
+  renderThreadView();
+
+  // ---------- view toggle ----------
+  var btnGrade = document.getElementById('btn-grade');
+  var btnThread = document.getElementById('btn-thread');
+  var viewGrade = document.getElementById('view-grade');
+  var viewThread = document.getElementById('view-thread');
+
+  function switchView(name){
+    var isGrade = name === 'grade';
+    btnGrade.classList.toggle('active', isGrade);
+    btnGrade.setAttribute('aria-pressed', isGrade ? 'true' : 'false');
+    btnThread.classList.toggle('active', !isGrade);
+    btnThread.setAttribute('aria-pressed', !isGrade ? 'true' : 'false');
+    viewGrade.classList.toggle('active', isGrade);
+    viewThread.classList.toggle('active', !isGrade);
+  }
+  btnGrade.addEventListener('click', function(){ switchView('grade'); });
+  btnThread.addEventListener('click', function(){ switchView('thread'); });
+
+  // ---------- search / filter ----------
+  var searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('input', function(){
+    var q = searchInput.value.trim().toLowerCase();
+
+    // grade view
+    document.querySelectorAll('#view-grade .grade').forEach(function(gradeEl){
+      var anyMatch = false;
+      gradeEl.querySelectorAll('.topic').forEach(function(topicEl){
+        var match = !q || (topicEl.getAttribute('data-search')||'').indexOf(q) !== -1;
+        topicEl.classList.toggle('hidden', !match);
+        if(match){ anyMatch = true; if(q) topicEl.open = true; }
+      });
+      gradeEl.classList.toggle('hidden', q && !anyMatch);
+      if(q && anyMatch) gradeEl.open = true;
+    });
+
+    // thread view
+    document.querySelectorAll('#view-thread .thread').forEach(function(threadEl){
+      var anyMatch = false;
+      threadEl.querySelectorAll('.thread-entry').forEach(function(entryEl){
+        var match = !q || (entryEl.getAttribute('data-search')||'').indexOf(q) !== -1;
+        entryEl.classList.toggle('hidden', !match);
+        if(match){ anyMatch = true; if(q) entryEl.open = true; }
+      });
+      threadEl.classList.toggle('hidden', q && !anyMatch);
+      if(q && anyMatch) threadEl.open = true;
+    });
+  });
+
+  // ---------- print ----------
+  document.getElementById('btn-print').addEventListener('click', function(){
+    window.print();
+  });
+
+  // ---------- deep links (share a link to a specific afsnit/emne) ----------
+  function goToHash(hash){
+    var id = (hash || '').replace(/^#/, '');
+    if(!id) return;
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(viewGrade.contains(el)) switchView('grade');
+    else if(viewThread.contains(el)) switchView('thread');
+    var node = el;
+    while(node){
+      if(node.tagName === 'DETAILS') node.open = true;
+      node = node.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+  }
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.copy-link');
+    if(!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var id = btn.getAttribute('data-target');
+    var target = document.getElementById(id);
+    if(target && target.tagName === 'DETAILS') target.open = true;
+    var url = location.origin + location.pathname + '#' + id;
+    history.replaceState(null, '', '#' + id);
+    var markCopied = function(){
+      btn.classList.add('copied');
+      setTimeout(function(){ btn.classList.remove('copied'); }, 1500);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(markCopied, markCopied);
+    } else {
+      markCopied();
+    }
+  });
+
+  window.addEventListener('hashchange', function(){ goToHash(location.hash); });
+  if(location.hash) goToHash(location.hash);
+
+})();
+</script>
+</body>
+</html>
